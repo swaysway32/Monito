@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Monito</title>
+  <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+  <nav class="container">
+    <a th:href="@{/}" class="logo">Monito</a>
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Home</a></li>
+      <li><a href="#">Browse Pets</a></li>
+      <li><a href="#">Browse Pet Toys</a></li>
+      <li><a href="#">Become a Seller</a></li>
+      <li><a href="#">Contact Us</a></li>
+      <li><a th:href="@{/login}">Login</a></li>
+      <li><a th:href="@{/signup}">Sign Up</a></li>
+      <li>
+        <label class="theme-toggle">
+          <input type="checkbox" id="theme-switch">
+          <span class="slider"></span>
+        </label>
+      </li>
+    </ul>
+    <button class="mobile-menu-toggle">☰</button>
+  </nav>
+</header>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <h1 class="page-title">Join Monito</h1>
+      <p class="page-subtitle">Create your account and start your journey with amazing pets</p>
+    </div>
+  </section>
+
+  <section class="main-content">
+    <div class="container">
+      <div class="auth-container">
+        <div class="card auth-card">
+          <h2>Create Your Account</h2>
+
+          <!-- Error Message -->
+          <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+            <span th:text="${error}"></span>
+          </div>
+
+          <form th:action="@{/signup}" method="post">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" class="form-control" required placeholder="Enter your first name">
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" class="form-control" required placeholder="Enter your last name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number (optional)">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" class="form-control" required placeholder="Create a strong password">
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required placeholder="Confirm your password">
+            </div>
+            <div class="form-group">
+              <label for="interests">I'm interested in:</label>
+              <select id="interests" name="interests" class="form-control">
+                <option value="">Select your interest</option>
+                <option value="buying-pets">Buying Pets</option>
+                <option value="buying-toys">Buying Pet Toys</option>
+                <option value="both">Both Pets and Toys</option>
+                <option value="selling">Selling (I'll register as seller later)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="terms" required>
+                <span class="checkmark"></span>
+                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="newsletter" name="newsletter">
+                <span class="checkmark"></span>
+                Subscribe to our newsletter for pet care tips and special offers
+              </label>
+            </div>
+            <button type="submit" class="btn btn-success auth-btn">Create Account</button>
+          </form>
+          <div class="auth-divider">
+            <span>or</span>
+          </div>
+          <div class="social-login">
+            <button class="btn btn-social google-btn">
+              <span class="social-icon">G</span>
+              Sign up with Google
+            </button>
+            <button class="btn btn-social facebook-btn">
+              <span class="social-icon">f</span>
+              Sign up with Facebook
+            </button>
+          </div>
+          <div class="auth-footer">
+            <p>Already have an account? <a th:href="@{/login}">Sign in here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a th:href="@{/}">Home</a></li>
+          <li><a href="#">Browse Pets</a></li>
+          <li><a href="#">Browse Pet Toys</a></li>
+          <li><a href="#">Become a Seller</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Safety Guidelines</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <div class="social-icons">
+          <a href="#" class="social-icon">f</a>
+          <a href="#" class="social-icon">t</a>
+          <a href="#" class="social-icon">i</a>
+          <a href="#" class="social-icon">y</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle functionality
+  const themeSwitch = document.getElementById('theme-switch');
+  const htmlElement = document.documentElement;
+
+  themeSwitch.addEventListener('change', function() {
+    if (this.checked) {
+      htmlElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      htmlElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  htmlElement.setAttribute('data-theme', savedTheme);
+  if (savedTheme === 'dark') {
+    themeSwitch.checked = true;
+  }
+</script>
+</body>
+</html>

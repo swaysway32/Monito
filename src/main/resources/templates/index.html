@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monito - Pet Marketplace</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a href="#">Browse Pets</a></li>
+            <li><a href="#">Browse Pet Toys</a></li>
+            <li><a href="#">Become a Seller</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <!-- Show different nav items based on login status -->
+            <li th:if="${!isLoggedIn}"><a th:href="@{/login}">Login</a></li>
+            <li th:if="${!isLoggedIn}"><a th:href="@{/signup}">Sign Up</a></li>
+            <li th:if="${isLoggedIn}"><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li th:if="${isLoggedIn}"><a th:href="@{/logout}">Logout</a></li>
+            <li>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+            </li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <!-- Success Message (after login) -->
+    <div th:if="${message}" class="alert alert-success" style="background-color: var(--accent-success); color: white; padding: 1rem; border-radius: 8px; margin: 1rem auto; max-width: 1200px; text-align: center;">
+        <span th:text="${message}"></span>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <!-- Show different titles based on login status -->
+            <h1 th:if="${!isLoggedIn}">Find Your Perfect Pet Companion</h1>
+            <h1 th:if="${isLoggedIn}">Welcome back, <span th:text="${userName}"></span>!</h1>
+
+            <p th:if="${!isLoggedIn}">Discover amazing pets and pet toys from trusted sellers worldwide</p>
+            <p th:if="${isLoggedIn}">Ready to find more amazing pets and toys for your furry friends?</p>
+
+            <a href="#" class="btn btn-secondary">Become a Seller</a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Browse Categories</h2>
+            <div class="grid grid-4">
+                <div class="card category-card">
+                    <div class="category-icon">🐕</div>
+                    <h3>Dogs</h3>
+                    <p>Find your loyal companion</p>
+                    <a href="#" class="btn btn-primary">Browse Dogs</a>
+                </div>
+                <div class="card category-card">
+                    <div class="category-icon">🐱</div>
+                    <h3>Cats</h3>
+                    <p>Discover independent friends</p>
+                    <a href="#" class="btn btn-primary">Browse Cats</a>
+                </div>
+                <div class="card category-card">
+                    <div class="category-icon">🐦</div>
+                    <h3>Birds</h3>
+                    <p>Colorful singing companions</p>
+                    <a href="#" class="btn btn-primary">Browse Birds</a>
+                </div>
+                <div class="card category-card">
+                    <div class="category-icon">🧸</div>
+                    <h3>Pet Toys</h3>
+                    <p>Fun toys for your pets</p>
+                    <a href="#" class="btn btn-primary">Browse Toys</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="featured">
+        <div class="container">
+            <h2 class="section-title">Featured Listings</h2>
+            <div class="grid grid-3">
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/golden-retriever.jpg}" alt="Golden Retriever Puppy" />
+                    </div>
+                    <h3 class="listing-title">Golden Retriever Puppy</h3>
+                    <p class="listing-price">$1,200</p>
+                    <p class="listing-description">Friendly and energetic 8-week-old puppy, perfect for families.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/persian.jpg}" alt="Persian Cat" />
+                    </div>
+                    <h3 class="listing-title">Persian Cat</h3>
+                    <p class="listing-price">$800</p>
+                    <p class="listing-description">Beautiful long-haired Persian cat, 2 years old, very gentle.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/parrot.jpg}" alt="Rainbow Lorikeet" />
+                    </div>
+                    <h3 class="listing-title">Rainbow Lorikeet</h3>
+                    <p class="listing-price">$450</p>
+                    <p class="listing-description">Vibrant and talkative bird, hand-raised and very social.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/dog-toy.jpg}" alt="Interactive Dog Toy" />
+                    </div>
+                    <h3 class="listing-title">Interactive Dog Toy</h3>
+                    <p class="listing-price">$25</p>
+                    <p class="listing-description">Smart puzzle toy that keeps dogs entertained for hours.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/cat-tree.jpg}" alt="Multi-Level Cat Tree" />
+                    </div>
+                    <h3 class="listing-title">Multi-Level Cat Tree</h3>
+                    <p class="listing-price">$89</p>
+                    <p class="listing-description">Large cat tree with scratching posts and cozy hideouts.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+                <div class="card listing-card">
+                    <div class="listing-image">
+                        <img th:src="@{/images/bird-cage.jpg}" alt="Premium Bird Cage" />
+                    </div>
+                    <h3 class="listing-title">Premium Bird Cage</h3>
+                    <p class="listing-price">$150</p>
+                    <p class="listing-description">Spacious cage perfect for medium to large birds.</p>
+                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a href="#">Browse Pets</a></li>
+                    <li><a href="#">Browse Pet Toys</a></li>
+                    <li><a href="#">Become a Seller</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">y</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Theme toggle functionality
+    const themeSwitch = document.getElementById('theme-switch');
+    const htmlElement = document.documentElement;
+
+    themeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+            htmlElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'dark') {
+        themeSwitch.checked = true;
+    }
+</script>
+</body>
+</html>

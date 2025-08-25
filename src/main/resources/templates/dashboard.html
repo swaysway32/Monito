@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Monito</title>
+  <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/dashboard}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li><a href="#">Browse Pets</a></li>
+            <li><a href="#">Browse Pet Toys</a></li>
+            <li><a href="#">My Orders</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a th:href="@{/login}">Logout</a></li>
+            <li>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+            </li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Welcome to Your Dashboard</h1>
+            <p class="page-subtitle">Manage your pet shopping experience</p>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="container">
+            <!-- Success Message -->
+            <div th:if="${message}" class="alert alert-success"
+                 style="background-color: var(--accent-success); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; text-align: center;">
+                <span th:text="${message}"></span>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="category-icon">🐕</div>
+                    <h3>Browse Pets</h3>
+                    <p>Find your perfect companion from our wide selection of pets</p>
+                    <a href="#" class="btn btn-primary">Browse Now</a>
+                </div>
+
+                <div class="card">
+                    <div class="category-icon">🎾</div>
+                    <h3>Pet Toys</h3>
+                    <p>Shop for the best toys to keep your pets happy and healthy</p>
+                    <a href="#" class="btn btn-primary">Shop Toys</a>
+                </div>
+
+                <div class="card">
+                    <div class="category-icon">📋</div>
+                    <h3>My Orders</h3>
+                    <p>Track your orders and view purchase history</p>
+                    <a href="#" class="btn btn-primary">View Orders</a>
+                </div>
+            </div>
+
+            <div class="grid grid-2" style="margin-top: 3rem;">
+                <div class="card">
+                    <h3>Quick Actions</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <a href="#" style="text-decoration: none; color: var(--text-primary);">Update Profile</a>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <a href="#" style="text-decoration: none; color: var(--text-primary);">Change Password</a>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <a href="#" style="text-decoration: none; color: var(--text-primary);">Notification
+                                Settings</a>
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <a href="#" style="text-decoration: none; color: var(--text-primary);">Help & Support</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <p style="color: var(--text-secondary); font-style: italic;">No recent activity to show.</p>
+                    <p>Start browsing pets and toys to see your activity here!</p>
+                    <a href="#" class="btn btn-secondary">Start Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                    <li><a href="#">Browse Pets</a></li>
+                    <li><a href="#">Browse Pet Toys</a></li>
+                    <li><a href="#">Become a Seller</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">y</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Theme toggle functionality
+    const themeSwitch = document.getElementById('theme-switch');
+    const htmlElement = document.documentElement;
+
+    themeSwitch.addEventListener('change', function () {
+        if (this.checked) {
+            htmlElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'dark') {
+        themeSwitch.checked = true;
+    }
+</script>
+</body>
+</html>
