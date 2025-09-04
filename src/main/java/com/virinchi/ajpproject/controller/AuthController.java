@@ -1,7 +1,9 @@
 package com.virinchi.ajpproject.controller;
 
 import com.virinchi.ajpproject.model.user;
+import com.virinchi.ajpproject.model.Admin;
 import com.virinchi.ajpproject.repository.UserRepository;
+import com.virinchi.ajpproject.repository.AdminRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.virinchi.ajpproject.repository.ListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class AuthController {
 
     @Autowired
     private ListingRepository listingRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     // Show login page
     @GetMapping("/login")
@@ -42,23 +47,42 @@ public class AuthController {
         // Hash the password to compare with stored hash
         String hashedPassword = DigestUtils.sha256Hex(password);
 
-        // Find user by email and password
-        user user = userRepository.findByEmailAndPassword(email, hashedPassword);
+        // First check if it's an admin login
+        Admin admin = adminRepository.findByUsernameAndPassword(email, hashedPassword);
+        if (admin != null) {
+            // Store admin info in session
+            session.setAttribute("loggedInUser", admin.getUsername());
+            session.setAttribute("isLoggedIn", true);
+            session.setAttribute("isAdmin", true);
 
+            // Admin login successful - redirect to admin page
+            redirectAttributes.addFlashAttribute("message", "Welcome, Admin!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+            return "redirect:/admin";
+        }
+
+        // Then check if it's a regular user login
+        user user = userRepository.findByEmailAndPassword(email, hashedPassword);
         if (user != null) {
             // Store user info in session
             session.setAttribute("loggedInUser", user.getFirstName());
             session.setAttribute("isLoggedIn", true);
 
-            // Login successful - redirect to index page
+            // User login successful - redirect to admin page
             redirectAttributes.addFlashAttribute("message", "Welcome back, " + user.getFirstName() + "!");
             redirectAttributes.addFlashAttribute("messageType", "success");
-            return "redirect:/";
+            return "redirect:/admin";
         } else {
             // Login failed
             redirectAttributes.addFlashAttribute("error", "Invalid email or password!");
             return "redirect:/login";
         }
+    }
+
+    // Admin page
+    @GetMapping("/admin")
+    public String showAdmin() {
+        return "admin";
     }
 
     // Handle signup form submission
