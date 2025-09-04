@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Listing - Monito</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a href="#">Browse Pets</a></li>
+            <li><a href="#">Browse Pet Toys</a></li>
+            <li><a href="#">Become a Seller</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a th:href="@{/login}">Login</a></li>
+            <li><a th:href="@{/signup}">Sign Up</a></li>
+            <li>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+            </li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Upload New Listing</h1>
+            <p class="page-subtitle">Create a new listing for your pet or pet toy</p>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+
+                <!-- Success Message -->
+                <div th:if="${success}" class="alert alert-success" style="background-color: var(--accent-primary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                    <span th:text="${success}"></span>
+                </div>
+
+                <!-- Error Message -->
+                <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form th:action="@{/upload-listing}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="listingType">Listing Type</label>
+                        <select id="listingType" name="listingType" class="form-control" required th:field="${listing.listingType}">
+                            <option value="">Select Type</option>
+                            <option value="pet">Pet</option>
+                            <option value="toy">Pet Toy</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="images">Upload Images</label>
+                        <input type="file" id="images" name="images" class="form-control" multiple accept="image/*">
+                        <small style="color: var(--text-secondary);">Upload up to 5 high-quality images</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Pet/Toy Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required
+                               placeholder="e.g., Golden Retriever Puppy or Interactive Dog Toy"
+                               th:field="${listing.name}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="form-control" required th:field="${listing.category}">
+                            <option value="">Select Category</option>
+                            <option value="dogs">Dogs</option>
+                            <option value="cats">Cats</option>
+                            <option value="birds">Birds</option>
+                            <option value="small-pets">Small Pets</option>
+                            <option value="dog-toys">Dog Toys</option>
+                            <option value="cat-toys">Cat Toys</option>
+                            <option value="bird-toys">Bird Toys</option>
+                            <option value="accessories">Pet Accessories</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="breed">Breed/Type</label>
+                        <input type="text" id="breed" name="breed" class="form-control"
+                               placeholder="e.g., Golden Retriever or Interactive Puzzle"
+                               th:field="${listing.breed}">
+                    </div>
+
+                    <div class="form-group" id="ageGroup">
+                        <label for="age">Age (for pets)</label>
+                        <select id="age" name="age" class="form-control" th:field="${listing.age}">
+                            <option value="">Select Age</option>
+                            <option value="0-3months">0-3 months</option>
+                            <option value="3-6months">3-6 months</option>
+                            <option value="6-12months">6-12 months</option>
+                            <option value="1-2years">1-2 years</option>
+                            <option value="2-5years">2-5 years</option>
+                            <option value="5+years">5+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price ($)</label>
+                        <input type="number" id="price" name="price" class="form-control" required
+                               min="0" step="0.01" placeholder="0.00" th:field="${listing.price}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" class="form-control" rows="6" required
+                                  placeholder="Provide detailed information about your pet or toy, including temperament, health status, training, special features, etc."
+                                  th:field="${listing.description}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" class="form-control" required
+                               placeholder="City, State" th:field="${listing.location}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact">Contact Information</label>
+                        <input type="text" id="contact" name="contact" class="form-control" required
+                               placeholder="Phone number or email" th:field="${listing.contact}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" name="terms" required style="margin-right: 0.5rem;">
+                            <span class="checkmark"></span>
+                            I certify that all information provided is accurate and I agree to the <a href="#">Terms of Service</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                        Submit Listing
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a href="#">Browse Pets</a></li>
+                    <li><a href="#">Browse Pet Toys</a></li>
+                    <li><a href="#">Become a Seller</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">y</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Theme toggle functionality
+    const themeSwitch = document.getElementById('theme-switch');
+    const htmlElement = document.documentElement;
+
+    themeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+            htmlElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'dark') {
+        themeSwitch.checked = true;
+    }
+
+    // Show/hide age field based on listing type
+    const listingType = document.getElementById('listingType');
+    const ageGroup = document.getElementById('ageGroup');
+
+    listingType.addEventListener('change', function() {
+        if (this.value === 'pet') {
+            ageGroup.style.display = 'block';
+            document.getElementById('age').required = true;
+        } else {
+            ageGroup.style.display = 'none';
+            document.getElementById('age').required = false;
+            document.getElementById('age').value = '';
+        }
+    });
+
+    // Initialize age field visibility based on current selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentType = listingType.value;
+        if (currentType === 'pet') {
+            ageGroup.style.display = 'block';
+            document.getElementById('age').required = true;
+        } else {
+            ageGroup.style.display = 'none';
+            document.getElementById('age').required = false;
+        }
+    });
+</script>
+</body>
+</html>

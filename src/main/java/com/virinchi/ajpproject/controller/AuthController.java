@@ -3,6 +3,7 @@ package com.virinchi.ajpproject.controller;
 import com.virinchi.ajpproject.model.user;
 import com.virinchi.ajpproject.repository.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
+import com.virinchi.ajpproject.repository.ListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ListingRepository listingRepository;
 
     // Show login page
     @GetMapping("/login")
@@ -118,6 +122,7 @@ public class AuthController {
             model.addAttribute("isLoggedIn", false);
         }
 
+        model.addAttribute("listings", listingRepository.findAll());
         return "index";
     }
 

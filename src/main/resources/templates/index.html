@@ -90,59 +90,14 @@
         <div class="container">
             <h2 class="section-title">Featured Listings</h2>
             <div class="grid grid-3">
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/golden-retriever.jpg}" alt="Golden Retriever Puppy" />
+                <div class="card listing-card" th:each="item : ${listings}">
+                    <div class="listing-image" th:if="${item.imagePaths}">
+                        <img th:src="${#strings.arraySplit(item.imagePaths, ',')[0]}" th:alt="${item.name}" />
                     </div>
-                    <h3 class="listing-title">Golden Retriever Puppy</h3>
-                    <p class="listing-price">$1,200</p>
-                    <p class="listing-description">Friendly and energetic 8-week-old puppy, perfect for families.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
-                </div>
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/persian.jpg}" alt="Persian Cat" />
-                    </div>
-                    <h3 class="listing-title">Persian Cat</h3>
-                    <p class="listing-price">$800</p>
-                    <p class="listing-description">Beautiful long-haired Persian cat, 2 years old, very gentle.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
-                </div>
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/parrot.jpg}" alt="Rainbow Lorikeet" />
-                    </div>
-                    <h3 class="listing-title">Rainbow Lorikeet</h3>
-                    <p class="listing-price">$450</p>
-                    <p class="listing-description">Vibrant and talkative bird, hand-raised and very social.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
-                </div>
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/dog-toy.jpg}" alt="Interactive Dog Toy" />
-                    </div>
-                    <h3 class="listing-title">Interactive Dog Toy</h3>
-                    <p class="listing-price">$25</p>
-                    <p class="listing-description">Smart puzzle toy that keeps dogs entertained for hours.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
-                </div>
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/cat-tree.jpg}" alt="Multi-Level Cat Tree" />
-                    </div>
-                    <h3 class="listing-title">Multi-Level Cat Tree</h3>
-                    <p class="listing-price">$89</p>
-                    <p class="listing-description">Large cat tree with scratching posts and cozy hideouts.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
-                </div>
-                <div class="card listing-card">
-                    <div class="listing-image">
-                        <img th:src="@{/images/bird-cage.jpg}" alt="Premium Bird Cage" />
-                    </div>
-                    <h3 class="listing-title">Premium Bird Cage</h3>
-                    <p class="listing-price">$150</p>
-                    <p class="listing-description">Spacious cage perfect for medium to large birds.</p>
-                    <a href="#" class="btn btn-primary">Contact Seller</a>
+                    <h3 class="listing-title" th:text="${item.name}">Listing Name</h3>
+                    <p class="listing-price" th:text="${'$' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                    <p class="listing-description" th:text="${item.description}">Description</p>
+                    <a href="#" class="btn btn-primary" th:text="${'Contact: ' + item.contact}">Contact Seller</a>
                 </div>
             </div>
         </div>
