@@ -79,11 +79,7 @@ public class AuthController {
         }
     }
 
-    // Admin page
-    @GetMapping("/admin")
-    public String showAdmin() {
-        return "admin";
-    }
+    // Admin page is handled in AdminController
 
     // Handle signup form submission
     @PostMapping("/signup")
