@@ -31,6 +31,9 @@ public class user {
     @Column(name = "newsletter_subscription")
     private boolean newsletterSubscription = false;
 
+    @Column(name = "seller_status")
+    private String sellerStatus = "none"; // none, pending, approved, rejected
+
     // Default constructor
     public user() {}
 
@@ -109,6 +112,14 @@ public class user {
 
     public void setNewsletterSubscription(boolean newsletterSubscription) {
         this.newsletterSubscription = newsletterSubscription;
+    }
+
+    public String getSellerStatus() {
+        return sellerStatus;
+    }
+
+    public void setSellerStatus(String sellerStatus) {
+        this.sellerStatus = sellerStatus;
     }
 
     @Override

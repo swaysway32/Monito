@@ -9,6 +9,7 @@
     --accent-primary: #3498db;
     --accent-secondary: #e74c3c;
     --accent-success: #27ae60;
+    --accent-warning: #f39c12;
     --border-color: #dee2e6;
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -25,6 +26,7 @@
     --accent-primary: #4a9eff;
     --accent-secondary: #ff6b6b;
     --accent-success: #51cf66;
+    --accent-warning: #ffd43b;
     --border-color: #4a4a4a;
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -193,6 +195,29 @@ input:checked + .slider:before {
 .btn-success {
     background-color: var(--accent-success);
     color: white;
+}
+
+/* Badges */
+.admin-badge {
+    background-color: var(--accent-secondary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.seller-badge {
+    background-color: var(--accent-warning);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
 }
 
 /* Cards */

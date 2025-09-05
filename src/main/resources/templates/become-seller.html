@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Listing - Monito</title>
+    <title>Become a Seller - Monito</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
@@ -35,8 +35,8 @@
 <main>
     <section class="page-header">
         <div class="container">
-            <h1 class="page-title">Upload New Listing</h1>
-            <p class="page-subtitle">Create a new listing for your pet or pet toy</p>
+            <h1 class="page-title">Become a Seller</h1>
+            <p class="page-subtitle">Join our marketplace and start selling pets and pet accessories</p>
         </div>
     </section>
 
@@ -52,106 +52,112 @@
                 <!-- Error Message -->
                 <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
                     <span th:text="${error}"></span>
-                    <div th:if="${error}" style="margin-top: 1rem;">
-                        <a th:href="@{/become-seller}" class="btn" style="background-color: var(--accent-primary); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px;">Apply to Become a Seller</a>
-                    </div>
                 </div>
 
-                <form th:action="@{/upload-listing}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/submit-seller-application}" method="post">
                     <div class="form-group">
-                        <label for="listingType">Listing Type</label>
-                        <select id="listingType" name="listingType" class="form-control" required th:field="${listing.listingType}">
-                            <option value="">Select Type</option>
-                            <option value="pet">Pet</option>
-                            <option value="toy">Pet Toy</option>
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="form-control" required
+                               placeholder="Enter your first name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="form-control" required
+                               placeholder="Enter your last name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required
+                               placeholder="Enter your email address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required
+                               placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessName">Business Name</label>
+                        <input type="text" id="businessName" name="businessName" class="form-control" required
+                               placeholder="Enter your business name or 'Individual Seller'">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType" name="businessType" class="form-control" required>
+                            <option value="">Select Business Type</option>
+                            <option value="individual">Individual Seller</option>
+                            <option value="pet_shop">Pet Shop</option>
+                            <option value="breeder">Pet Breeder</option>
+                            <option value="rescue">Pet Rescue Organization</option>
+                            <option value="veterinary">Veterinary Clinic</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="images">Upload Images</label>
-                        <input type="file" id="images" name="images" class="form-control" multiple accept="image/*">
-                        <small style="color: var(--text-secondary);">Upload up to 5 high-quality images</small>
+                        <label for="businessDescription">Business Description</label>
+                        <textarea id="businessDescription" name="businessDescription" class="form-control" rows="4" required
+                                  placeholder="Describe your business, experience, and what you plan to sell"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="name">Pet/Toy Name</label>
-                        <input type="text" id="name" name="name" class="form-control" required
-                               placeholder="e.g., Golden Retriever Puppy or Interactive Dog Toy"
-                               th:field="${listing.name}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="category">Category</label>
-                        <select id="category" name="category" class="form-control" required th:field="${listing.category}">
-                            <option value="">Select Category</option>
-                            <option value="dogs">Dogs</option>
-                            <option value="cats">Cats</option>
-                            <option value="birds">Birds</option>
-                            <option value="small-pets">Small Pets</option>
-                            <option value="dog-toys">Dog Toys</option>
-                            <option value="cat-toys">Cat Toys</option>
-                            <option value="bird-toys">Bird Toys</option>
-                            <option value="accessories">Pet Accessories</option>
+                        <label for="experience">Pet Industry Experience</label>
+                        <select id="experience" name="experience" class="form-control" required>
+                            <option value="">Select Experience Level</option>
+                            <option value="beginner">Beginner (0-1 years)</option>
+                            <option value="intermediate">Intermediate (1-3 years)</option>
+                            <option value="experienced">Experienced (3-5 years)</option>
+                            <option value="expert">Expert (5+ years)</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="breed">Breed/Type</label>
-                        <input type="text" id="breed" name="breed" class="form-control"
-                               placeholder="e.g., Golden Retriever or Interactive Puzzle"
-                               th:field="${listing.breed}">
-                    </div>
-
-                    <div class="form-group" id="ageGroup">
-                        <label for="age">Age (for pets)</label>
-                        <select id="age" name="age" class="form-control" th:field="${listing.age}">
-                            <option value="">Select Age</option>
-                            <option value="0-3months">0-3 months</option>
-                            <option value="3-6months">3-6 months</option>
-                            <option value="6-12months">6-12 months</option>
-                            <option value="1-2years">1-2 years</option>
-                            <option value="2-5years">2-5 years</option>
-                            <option value="5+years">5+ years</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="price">Price (NPR)</label>
-                        <input type="number" id="price" name="price" class="form-control" required
-                               min="0" step="0.01" placeholder="0.00" th:field="${listing.price}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" class="form-control" rows="6" required
-                                  placeholder="Provide detailed information about your pet or toy, including temperament, health status, training, special features, etc."
-                                  th:field="${listing.description}"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="location">Location</label>
                         <input type="text" id="location" name="location" class="form-control" required
-                               placeholder="City, State" th:field="${listing.location}">
+                               placeholder="City, State/Province">
                     </div>
 
                     <div class="form-group">
-                        <label for="contact">Contact Information</label>
-                        <input type="text" id="contact" name="contact" class="form-control" required
-                               placeholder="Phone number or email" th:field="${listing.contact}">
+                        <label for="reasonToSell">Why do you want to sell on Monito?</label>
+                        <textarea id="reasonToSell" name="reasonToSell" class="form-control" rows="3" required
+                                  placeholder="Tell us about your motivation and goals for selling on our platform"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-label">
                             <input type="checkbox" id="terms" name="terms" required style="margin-right: 0.5rem;">
                             <span class="checkmark"></span>
-                            I certify that all information provided is accurate and I agree to the <a href="#">Terms of Service</a>
+                            I agree to the <a href="#" target="_blank">Seller Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="verification" name="verification" required style="margin-right: 0.5rem;">
+                            <span class="checkmark"></span>
+                            I certify that all information provided is accurate and I understand that my application will be reviewed by our admin team
                         </label>
                     </div>
 
                     <button type="submit" class="btn btn-success" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
-                        Submit Listing
+                        Submit Application
                     </button>
                 </form>
+
+                <div style="margin-top: 2rem; padding: 1rem; background-color: var(--bg-secondary); border-radius: 8px;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary);">What happens next?</h3>
+                    <ol style="color: var(--text-secondary); line-height: 1.6;">
+                        <li>Your application will be reviewed by our admin team</li>
+                        <li>We'll verify your information and business details</li>
+                        <li>You'll receive an email notification about the decision</li>
+                        <li>If approved, you'll gain access to upload products and manage listings</li>
+                        <li>Review process typically takes 1-3 business days</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </section>
@@ -166,7 +172,7 @@
                     <li><a th:href="@{/}">Home</a></li>
                     <li><a href="#">Browse Pets</a></li>
                     <li><a href="#">Browse Pet Toys</a></li>
-                    <li><a href="#">Become a Seller</a></li>
+                    <li><a th:href="@{/become-seller}">Become a Seller</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -215,33 +221,6 @@
     if (savedTheme === 'dark') {
         themeSwitch.checked = true;
     }
-
-    // Show/hide age field based on listing type
-    const listingType = document.getElementById('listingType');
-    const ageGroup = document.getElementById('ageGroup');
-
-    listingType.addEventListener('change', function() {
-        if (this.value === 'pet') {
-            ageGroup.style.display = 'block';
-            document.getElementById('age').required = true;
-        } else {
-            ageGroup.style.display = 'none';
-            document.getElementById('age').required = false;
-            document.getElementById('age').value = '';
-        }
-    });
-
-    // Initialize age field visibility based on current selection
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentType = listingType.value;
-        if (currentType === 'pet') {
-            ageGroup.style.display = 'block';
-            document.getElementById('age').required = true;
-        } else {
-            ageGroup.style.display = 'none';
-            document.getElementById('age').required = false;
-        }
-    });
 </script>
 </body>
 </html>

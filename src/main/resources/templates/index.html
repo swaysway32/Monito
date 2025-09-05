@@ -14,12 +14,14 @@
             <li><a th:href="@{/}">Home</a></li>
             <li><a href="#">Browse Pets</a></li>
             <li><a href="#">Browse Pet Toys</a></li>
-            <li><a href="#">Become a Seller</a></li>
+            <li><a th:href="@{/become-seller}">Become a Seller</a></li>
             <li><a href="#">Contact Us</a></li>
             <!-- Show different nav items based on login status -->
             <li th:if="${!isLoggedIn}"><a th:href="@{/login}">Login</a></li>
             <li th:if="${!isLoggedIn}"><a th:href="@{/signup}">Sign Up</a></li>
-            <li th:if="${isLoggedIn}"><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li th:if="${isLoggedIn && isSeller}"><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li th:if="${isAdmin}"><span class="admin-badge">ADMIN</span></li>
+            <li th:if="${isSeller}"><a th:href="@{/dashboard}" class="seller-badge" style="text-decoration: none;">SELLER</a></li>
             <li th:if="${isLoggedIn}"><a th:href="@{/logout}">Logout</a></li>
             <li>
                 <label class="theme-toggle">
@@ -48,7 +50,7 @@
             <p th:if="${!isLoggedIn}">Discover amazing pets and pet toys from trusted sellers worldwide</p>
             <p th:if="${isLoggedIn}">Ready to find more amazing pets and toys for your furry friends?</p>
 
-            <a href="#" class="btn btn-secondary">Become a Seller</a>
+            <a th:href="@{/become-seller}" class="btn btn-secondary">Become a Seller</a>
         </div>
     </section>
 
@@ -113,7 +115,7 @@
                     <li><a th:href="@{/}">Home</a></li>
                     <li><a href="#">Browse Pets</a></li>
                     <li><a href="#">Browse Pet Toys</a></li>
-                    <li><a href="#">Become a Seller</a></li>
+                    <li><a th:href="@{/become-seller}">Become a Seller</a></li>
                 </ul>
             </div>
             <div class="footer-section">

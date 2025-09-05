@@ -164,6 +164,16 @@
                         <div class="stat-number" th:text="${totalListings}">0</div>
                         <div class="stat-label">Total Products</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: var(--accent-warning);">👥</div>
+                        <div class="stat-number" th:text="${totalApplications}">0</div>
+                        <div class="stat-label">Total Applications</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: var(--accent-secondary);">⏳</div>
+                        <div class="stat-number" th:text="${pendingCount}">0</div>
+                        <div class="stat-label">Pending Reviews</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -199,6 +209,123 @@
                             <form th:action="@{/admin/listings/{id}/delete(id=${item.id})}" method="post" onsubmit="return confirm('Delete this product? This cannot be undone.');">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seller Application Management Section -->
+        <section class="applications-section" style="background-color: var(--bg-secondary);">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Seller Applications</h2>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="toggleApplications('pending')" class="btn btn-secondary" id="pendingBtn">Pending (<span th:text="${pendingCount}">0</span>)</button>
+                        <button onclick="toggleApplications('all')" class="btn btn-secondary" id="allBtn">All Applications</button>
+                    </div>
+                </div>
+
+                <!-- Pending Applications -->
+                <div id="pendingApplications">
+                    <div class="application-card" th:if="${#lists.isEmpty(pendingApplications)}">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3>No Pending Applications</h3>
+                            <p>All seller applications have been reviewed.</p>
+                        </div>
+                    </div>
+
+                    <div class="application-card" th:each="app : ${pendingApplications}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 th:text="${app.firstName + ' ' + app.lastName}">Applicant Name</h3>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0;">
+                                    <div><strong>Email:</strong> <span th:text="${app.email}">email@example.com</span></div>
+                                    <div><strong>Phone:</strong> <span th:text="${app.phone}">+1234567890</span></div>
+                                    <div><strong>Business:</strong> <span th:text="${app.businessName}">Business Name</span></div>
+                                    <div><strong>Type:</strong> <span th:text="${app.businessType}">Business Type</span></div>
+                                    <div><strong>Location:</strong> <span th:text="${app.location}">City, State</span></div>
+                                    <div><strong>Experience:</strong> <span th:text="${app.experience}">Experience Level</span></div>
+                                </div>
+                                <div style="margin: 1rem 0;">
+                                    <strong>Business Description:</strong>
+                                    <p style="margin-top: 0.5rem; color: var(--text-secondary);" th:text="${app.businessDescription}">Business description...</p>
+                                </div>
+                                <div style="margin: 1rem 0;">
+                                    <strong>Reason to Sell:</strong>
+                                    <p style="margin-top: 0.5rem; color: var(--text-secondary);" th:text="${app.reasonToSell}">Reason to sell...</p>
+                                </div>
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">
+                                    Applied: <span th:text="${#temporals.format(app.applicationDate, 'MMM dd, yyyy HH:mm')}">Date</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 200px;">
+                                <form th:action="@{/admin/seller-applications/{id}/approve(id=${app.id})}" method="post" style="margin: 0;">
+                                    <textarea name="adminNotes" placeholder="Admin notes (optional)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; min-height: 60px;"></textarea>
+                                    <button type="submit" class="btn" style="background-color: var(--accent-success); color: white; width: 100%;">Approve</button>
+                                </form>
+                                <form th:action="@{/admin/seller-applications/{id}/reject(id=${app.id})}" method="post" style="margin: 0;">
+                                    <textarea name="adminNotes" placeholder="Rejection reason (optional)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; min-height: 60px;"></textarea>
+                                    <button type="submit" class="btn btn-danger" style="width: 100%;">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Applications -->
+                <div id="allApplications" class="hidden">
+                    <div class="application-card" th:if="${#lists.isEmpty(allApplications)}">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3>No Applications Found</h3>
+                            <p>No seller applications have been submitted yet.</p>
+                        </div>
+                    </div>
+
+                    <div class="application-card" th:each="app : ${allApplications}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 th:text="${app.firstName + ' ' + app.lastName}">Applicant Name</h3>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0;">
+                                    <div><strong>Email:</strong> <span th:text="${app.email}">email@example.com</span></div>
+                                    <div><strong>Phone:</strong> <span th:text="${app.phone}">+1234567890</span></div>
+                                    <div><strong>Business:</strong> <span th:text="${app.businessName}">Business Name</span></div>
+                                    <div><strong>Type:</strong> <span th:text="${app.businessType}">Business Type</span></div>
+                                    <div><strong>Location:</strong> <span th:text="${app.location}">City, State</span></div>
+                                    <div><strong>Experience:</strong> <span th:text="${app.experience}">Experience Level</span></div>
+                                    <div><strong>Status:</strong> 
+                                        <span th:if="${app.status == 'pending'}" style="color: var(--accent-warning); font-weight: bold;">PENDING</span>
+                                        <span th:if="${app.status == 'approved'}" style="color: var(--accent-success); font-weight: bold;">APPROVED</span>
+                                        <span th:if="${app.status == 'rejected'}" style="color: var(--accent-secondary); font-weight: bold;">REJECTED</span>
+                                    </div>
+                                </div>
+                                <div style="margin: 1rem 0;">
+                                    <strong>Business Description:</strong>
+                                    <p style="margin-top: 0.5rem; color: var(--text-secondary);" th:text="${app.businessDescription}">Business description...</p>
+                                </div>
+                                <div style="margin: 1rem 0;">
+                                    <strong>Reason to Sell:</strong>
+                                    <p style="margin-top: 0.5rem; color: var(--text-secondary);" th:text="${app.reasonToSell}">Reason to sell...</p>
+                                </div>
+                                <div th:if="${app.adminNotes}" style="margin: 1rem 0;">
+                                    <strong>Admin Notes:</strong>
+                                    <p style="margin-top: 0.5rem; color: var(--text-secondary);" th:text="${app.adminNotes}">Admin notes...</p>
+                                </div>
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">
+                                    Applied: <span th:text="${#temporals.format(app.applicationDate, 'MMM dd, yyyy HH:mm')}">Date</span>
+                                    <span th:if="${app.reviewDate}"> | Reviewed: <span th:text="${#temporals.format(app.reviewDate, 'MMM dd, yyyy HH:mm')}">Date</span></span>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 200px;" th:if="${app.status == 'pending'}">
+                                <form th:action="@{/admin/seller-applications/{id}/approve(id=${app.id})}" method="post" style="margin: 0;">
+                                    <textarea name="adminNotes" placeholder="Admin notes (optional)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; min-height: 60px;"></textarea>
+                                    <button type="submit" class="btn" style="background-color: var(--accent-success); color: white; width: 100%;">Approve</button>
+                                </form>
+                                <form th:action="@{/admin/seller-applications/{id}/reject(id=${app.id})}" method="post" style="margin: 0;">
+                                    <textarea name="adminNotes" placeholder="Rejection reason (optional)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; min-height: 60px;"></textarea>
+                                    <button type="submit" class="btn btn-danger" style="width: 100%;">Reject</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,6 +389,34 @@
         if (savedTheme === 'dark' && themeSwitch) {
             themeSwitch.checked = true;
         }
+
+        function toggleApplications(type) {
+            const pendingDiv = document.getElementById('pendingApplications');
+            const allDiv = document.getElementById('allApplications');
+            const pendingBtn = document.getElementById('pendingBtn');
+            const allBtn = document.getElementById('allBtn');
+
+            if (type === 'pending') {
+                pendingDiv.classList.remove('hidden');
+                allDiv.classList.add('hidden');
+                pendingBtn.style.backgroundColor = 'var(--accent-primary)';
+                pendingBtn.style.color = 'white';
+                allBtn.style.backgroundColor = 'var(--bg-secondary)';
+                allBtn.style.color = 'var(--text-primary)';
+            } else {
+                pendingDiv.classList.add('hidden');
+                allDiv.classList.remove('hidden');
+                allBtn.style.backgroundColor = 'var(--accent-primary)';
+                allBtn.style.color = 'white';
+                pendingBtn.style.backgroundColor = 'var(--bg-secondary)';
+                pendingBtn.style.color = 'var(--text-primary)';
+            }
+        }
+
+        // Initialize with pending applications shown
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleApplications('pending');
+        });
     </script>
 </body>
 </html>
