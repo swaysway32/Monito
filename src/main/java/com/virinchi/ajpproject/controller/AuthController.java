@@ -6,6 +6,9 @@ import com.virinchi.ajpproject.repository.UserRepository;
 import com.virinchi.ajpproject.repository.AdminRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.virinchi.ajpproject.repository.ListingRepository;
+import com.virinchi.ajpproject.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AuthController {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -24,6 +29,9 @@ public class AuthController {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired(required = false)
+    private EmailService emailService;
 
     // Show login page
     @GetMapping("/login")
@@ -124,6 +132,13 @@ public class AuthController {
 
         try {
             userRepository.save(newUser);
+            try {
+                if (emailService != null) {
+                    emailService.sendWelcomeEmail(email, firstName);
+                }
+            } catch (Exception ex) {
+                log.warn("Welcome email failed for {}: {}", email, ex.getMessage());
+            }
             redirectAttributes.addFlashAttribute("message", "Account created successfully! Please log in.");
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/login";
