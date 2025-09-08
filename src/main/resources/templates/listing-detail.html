@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${listing.name}">Listing</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <style>
+        .detail-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+        .detail-hero { grid-column: 1 / -1; }
+        .detail-hero img, .detail-gallery img { width: 100%; height: auto; border-radius: 8px; }
+    </style>
+    </head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a href="#">Browse Pets</a></li>
+            <li><a href="#">Browse Pet Toys</a></li>
+            <li><a th:href="@{/become-seller}">Become a Seller</a></li>
+            <li>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+            </li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title" th:text="${listing.name}">Listing</h1>
+            <p class="page-subtitle" th:text="${listing.category}">Category</p>
+            <p style="margin-top:0.5rem;">
+                <a th:href="@{/}" style="text-decoration:none;">Home</a> /
+                <a th:href="@{'/listing/' + ${listing.id}}" style="text-decoration:none;" th:text="${listing.name}">Listing</a>
+            </p>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="grid grid-2">
+                <div>
+                    <div class="detail-gallery">
+                        <div class="detail-hero" th:if="${listing.imagePaths}">
+                            <img th:src="${#strings.arraySplit(listing.imagePaths, ',')[0]}" th:alt="${listing.name}">
+                        </div>
+                        <div th:each="img, iStat : ${#strings.arraySplit(listing.imagePaths, ',')}">
+                            <img th:if="${iStat.index > 0}" th:src="${img}" th:alt="${listing.name}">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <h2 th:text="${listing.name}">Name</h2>
+                        <p class="listing-price" th:text="${'$' + #numbers.formatDecimal(listing.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                        <p><strong>Type:</strong> <span th:text="${listing.listingType}"></span></p>
+                        <p><strong>Breed/Type:</strong> <span th:text="${listing.breed}"></span></p>
+                        <p><strong>Age:</strong> <span th:text="${listing.age}"></span></p>
+                        <p><strong>Location:</strong> <span th:text="${listing.location}"></span></p>
+                        <div style="margin-top: 1rem;">
+                            <h3>Description</h3>
+                            <p th:text="${listing.description}"></p>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <h3>Contact</h3>
+                            <p th:text="${listing.contact}"></p>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <a th:href="@{/}" class="btn btn-secondary">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-bottom">
+            <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+<script>
+    const themeSwitch = document.getElementById('theme-switch');
+    const htmlElement = document.documentElement;
+    if (themeSwitch) {
+        themeSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            themeSwitch.checked = true;
+        }
+    }
+</script>
+</html>
+
+

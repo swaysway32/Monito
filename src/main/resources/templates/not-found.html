@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found - Monito</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Not Found</h1>
+            <p class="page-subtitle">The listing you’re looking for doesn’t exist.</p>
+        </div>
+    </section>
+    <section class="main-content">
+        <div class="container">
+            <div class="card" style="text-align:center;">
+                <p>Try returning to the home page to continue browsing.</p>
+                <a th:href="@{/}" class="btn btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
+
+

@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,6 +45,9 @@ public class ListingController {
             redirectAttributes.addFlashAttribute("error", "Please log in to access seller features.");
             return "redirect:/login";
         }
+        // Provide safe defaults for header flags
+        model.addAttribute("isLoggedIn", true);
+        model.addAttribute("isSeller", false);
 
         // Check if user is an approved seller
         String userEmail = (String) session.getAttribute("loggedInUser");
@@ -61,12 +65,12 @@ public class ListingController {
                     }
                     return "redirect:/become-seller";
                 }
+                // User is approved seller
+                model.addAttribute("isSeller", true);
             }
         }
 
-        // Get seller status for display
-        Boolean isSeller = (Boolean) session.getAttribute("isSeller");
-        model.addAttribute("isSeller", isSeller != null && isSeller);
+        // Ensure listing backing object
         model.addAttribute("listing", new Listing());
         return "seller-upload";
     }
@@ -143,6 +147,33 @@ public class ListingController {
             redirectAttributes.addFlashAttribute("error", "Upload failed. Please try again.");
             return "redirect:/seller-upload";
         }
+    }
+
+    @GetMapping("/api/search")
+    @ResponseBody
+    public List<Listing> searchListings(@RequestParam("q") String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of();
+        }
+        return listingRepository.searchByKeyword(query.trim());
+    }
+
+    @GetMapping("/listing/{id:\\d+}{slug:(?:-[a-z0-9-]+)?}")
+    public String viewListing(@org.springframework.web.bind.annotation.PathVariable Long id,
+                              @org.springframework.web.bind.annotation.PathVariable(required = false) String slug,
+                              Model model) {
+        Listing listing = listingRepository.findById(id).orElse(null);
+        if (listing == null) {
+            return "not-found";
+        }
+        model.addAttribute("listing", listing);
+        return "listing-detail";
+    }
+
+    @GetMapping("/api/listing/{id}")
+    @ResponseBody
+    public Listing getListing(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        return listingRepository.findById(id).orElse(null);
     }
 }
 

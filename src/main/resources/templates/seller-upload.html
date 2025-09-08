@@ -57,10 +57,10 @@
                     </div>
                 </div>
 
-                <form th:action="@{/upload-listing}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/upload-listing}" method="post" enctype="multipart/form-data" th:object="${listing}">
                     <div class="form-group">
                         <label for="listingType">Listing Type</label>
-                        <select id="listingType" name="listingType" class="form-control" required th:field="${listing.listingType}">
+                        <select id="listingType" name="listingType" class="form-control" required th:field="*{listingType}">
                             <option value="">Select Type</option>
                             <option value="pet">Pet</option>
                             <option value="toy">Pet Toy</option>
@@ -77,12 +77,12 @@
                         <label for="name">Pet/Toy Name</label>
                         <input type="text" id="name" name="name" class="form-control" required
                                placeholder="e.g., Golden Retriever Puppy or Interactive Dog Toy"
-                               th:field="${listing.name}">
+                               th:field="*{name}">
                     </div>
 
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <select id="category" name="category" class="form-control" required th:field="${listing.category}">
+                        <select id="category" name="category" class="form-control" required th:field="*{category}">
                             <option value="">Select Category</option>
                             <option value="dogs">Dogs</option>
                             <option value="cats">Cats</option>
@@ -99,12 +99,12 @@
                         <label for="breed">Breed/Type</label>
                         <input type="text" id="breed" name="breed" class="form-control"
                                placeholder="e.g., Golden Retriever or Interactive Puzzle"
-                               th:field="${listing.breed}">
+                               th:field="*{breed}">
                     </div>
 
                     <div class="form-group" id="ageGroup">
                         <label for="age">Age (for pets)</label>
-                        <select id="age" name="age" class="form-control" th:field="${listing.age}">
+                        <select id="age" name="age" class="form-control" th:field="*{age}">
                             <option value="">Select Age</option>
                             <option value="0-3months">0-3 months</option>
                             <option value="3-6months">3-6 months</option>
@@ -118,26 +118,26 @@
                     <div class="form-group">
                         <label for="price">Price (NPR)</label>
                         <input type="number" id="price" name="price" class="form-control" required
-                               min="0" step="0.01" placeholder="0.00" th:field="${listing.price}">
+                               min="0" step="0.01" placeholder="0.00" th:field="*{price}">
                     </div>
 
                     <div class="form-group">
                         <label for="description">Description</label>
                         <textarea id="description" name="description" class="form-control" rows="6" required
                                   placeholder="Provide detailed information about your pet or toy, including temperament, health status, training, special features, etc."
-                                  th:field="${listing.description}"></textarea>
+                                  th:field="*{description}"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="location">Location</label>
                         <input type="text" id="location" name="location" class="form-control" required
-                               placeholder="City, State" th:field="${listing.location}">
+                               placeholder="City, State" th:field="*{location}">
                     </div>
 
                     <div class="form-group">
                         <label for="contact">Contact Information</label>
                         <input type="text" id="contact" name="contact" class="form-control" required
-                               placeholder="Phone number or email" th:field="${listing.contact}">
+                               placeholder="Phone number or email" th:field="*{contact}">
                     </div>
 
                     <div class="form-group">

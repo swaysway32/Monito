@@ -50,7 +50,13 @@
             <p th:if="${!isLoggedIn}">Discover amazing pets and pet toys from trusted sellers worldwide</p>
             <p th:if="${isLoggedIn}">Ready to find more amazing pets and toys for your furry friends?</p>
 
-            <a th:href="@{/become-seller}" class="btn btn-secondary">Become a Seller</a>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center;">
+                <input id="searchInput" type="text" placeholder="Search pets, toys, breeds..." class="form-control" style="flex: 1; padding: 0.75rem;">
+                <button id="searchBtn" class="btn btn-primary">Search</button>
+            </div>
+            <div id="searchResults" class="grid grid-3" style="margin-top: 1.5rem; display: none;"></div>
+
+            <a th:href="@{/become-seller}" class="btn btn-secondary" style="margin-top: 1rem;">Become a Seller</a>
         </div>
     </section>
 
@@ -92,15 +98,15 @@
         <div class="container">
             <h2 class="section-title">Featured Listings</h2>
             <div class="grid grid-3">
-                <div class="card listing-card" th:each="item : ${listings}">
+                <a class="card listing-card" th:each="item : ${listings}"
+                   th:href="@{'/listing/' + ${item.id} + '-' + ${#strings.replace(#strings.toLowerCase(item.name), ' ', '-')}}"
+                   style="text-decoration: none; color: inherit;">
                     <div class="listing-image" th:if="${item.imagePaths}">
                         <img th:src="${#strings.arraySplit(item.imagePaths, ',')[0]}" th:alt="${item.name}" />
                     </div>
                     <h3 class="listing-title" th:text="${item.name}">Listing Name</h3>
                     <p class="listing-price" th:text="${'$' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
-                    <p class="listing-description" th:text="${item.description}">Description</p>
-                    <a href="#" class="btn btn-primary" th:text="${'Contact: ' + item.contact}">Contact Seller</a>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -164,6 +170,58 @@
     if (savedTheme === 'dark') {
         themeSwitch.checked = true;
     }
+
+    // --- Simple search with debounce ---
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const results = document.getElementById('searchResults');
+
+    function renderResults(items) {
+        if (!items || items.length === 0) {
+            results.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-secondary);">No results found.</p>';
+            results.style.display = 'grid';
+            return;
+        }
+        const cards = items.map(item => {
+            const firstImage = (item.imagePaths || '').split(',')[0] || '';
+            const price = typeof item.price === 'number' ? item.price.toFixed(2) : '0.00';
+            const slug = (item.name || '').toLowerCase().replace(/\s+/g, '-');
+            return `
+                <a class="card listing-card" href="/listing/${item.id}-${slug}" style="text-decoration:none;color:inherit;">
+                    ${firstImage ? `<div class=\"listing-image\"><img src=\"${firstImage}\" alt=\"${item.name}\"/></div>` : ''}
+                    <h3 class=\"listing-title\">${item.name || ''}</h3>
+                    <p class=\"listing-price\">$${price}</p>
+                </a>`;
+        }).join('');
+        results.innerHTML = cards;
+        results.style.display = 'grid';
+    }
+
+    let debounceTimer;
+    function doSearch() {
+        const q = searchInput.value.trim();
+        if (!q) {
+            results.style.display = 'none';
+            results.innerHTML = '';
+            return;
+        }
+        fetch(`/api/search?q=${encodeURIComponent(q)}`)
+            .then(r => r.json())
+            .then(renderResults)
+            .catch(() => {
+                results.innerHTML = '<p style="grid-column:1/-1;color:var(--accent-secondary);">Search failed. Try again.</p>';
+                results.style.display = 'grid';
+            });
+    }
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(doSearch, 300);
+    });
+    searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        doSearch();
+    });
 </script>
 </body>
 </html>
