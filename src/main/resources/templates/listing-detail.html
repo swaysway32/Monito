@@ -59,7 +59,7 @@
                 <div>
                     <div class="card">
                         <h2 th:text="${listing.name}">Name</h2>
-                        <p class="listing-price" th:text="${'$' + #numbers.formatDecimal(listing.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                        <p class="listing-price" th:text="${'NPR ' + #numbers.formatDecimal(listing.price, 1, 'COMMA', 2, 'POINT')}">NPR 0.00</p>
                         <p><strong>Type:</strong> <span th:text="${listing.listingType}"></span></p>
                         <p><strong>Breed/Type:</strong> <span th:text="${listing.breed}"></span></p>
                         <p><strong>Age:</strong> <span th:text="${listing.age}"></span></p>

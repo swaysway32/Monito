@@ -97,7 +97,7 @@
     <section class="featured">
         <div class="container">
             <h2 class="section-title">Featured Listings</h2>
-            <div class="grid grid-3">
+            <div class="grid grid-3" style="align-items: stretch;">
                 <a class="card listing-card" th:each="item : ${listings}"
                    th:href="@{'/listing/' + ${item.id} + '-' + ${#strings.replace(#strings.toLowerCase(item.name), ' ', '-')}}"
                    style="text-decoration: none; color: inherit;">
@@ -105,7 +105,7 @@
                         <img th:src="${#strings.arraySplit(item.imagePaths, ',')[0]}" th:alt="${item.name}" />
                     </div>
                     <h3 class="listing-title" th:text="${item.name}">Listing Name</h3>
-                    <p class="listing-price" th:text="${'$' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                    <p class="listing-price" th:text="${'NPR ' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">NPR 0.00</p>
                 </a>
             </div>
         </div>
@@ -187,10 +187,10 @@
             const price = typeof item.price === 'number' ? item.price.toFixed(2) : '0.00';
             const slug = (item.name || '').toLowerCase().replace(/\s+/g, '-');
             return `
-                <a class="card listing-card" href="/listing/${item.id}-${slug}" style="text-decoration:none;color:inherit;">
-                    ${firstImage ? `<div class=\"listing-image\"><img src=\"${firstImage}\" alt=\"${item.name}\"/></div>` : ''}
-                    <h3 class=\"listing-title\">${item.name || ''}</h3>
-                    <p class=\"listing-price\">$${price}</p>
+                <a class=\"card listing-card\" href=\"/listing/${item.id}-${slug}\" style=\"text-decoration:none;color:inherit;\">
+                    ${firstImage ? `<div class=\\\"listing-image\\\"><img src=\\\"${firstImage}\\\" alt=\\\"${item.name}\\\"/></div>` : ''}
+                    <h3 class=\\\"listing-title\\\">${item.name || ''}</h3>
+                    <p class=\\\"listing-price\\\">NPR ${price}</p>
                 </a>`;
         }).join('');
         results.innerHTML = cards;

@@ -200,7 +200,7 @@
                             <h3 th:text="${item.name}">Product Name</h3>
                             <div style="color: var(--text-secondary); font-size: 0.9rem;">
                                 <span th:text="${item.category}">Category</span>
-                                <span th:if="${item.price != null}" th:text="${' • $' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}"></span>
+                                <span th:if="${item.price != null}" th:text="${' • NPR ' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}"></span>
                             </div>
                             <p style="margin-top:0.5rem; color: var(--text-secondary);" th:text="${item.description}">Description</p>
                         </div>
