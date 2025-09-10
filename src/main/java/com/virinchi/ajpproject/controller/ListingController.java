@@ -138,6 +138,7 @@ public class ListingController {
             listing.setLocation(location);
             listing.setContact(contact);
             listing.setImagePaths(String.join(",", storedPaths));
+            listing.setOwnerEmail(userEmail);
 
             listingRepository.save(listing);
 
@@ -156,6 +157,62 @@ public class ListingController {
             return List.of();
         }
         return listingRepository.searchByKeyword(query.trim());
+    }
+
+    @GetMapping("/seller/manage")
+    public String manageListings(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (isLoggedIn == null || !isLoggedIn) {
+            redirectAttributes.addFlashAttribute("error", "Please log in to manage listings.");
+            return "redirect:/login";
+        }
+        String userEmail = (String) session.getAttribute("loggedInUser");
+        if (userEmail == null) {
+            return "redirect:/login";
+        }
+        List<Listing> myListings = listingRepository.findByOwnerEmailOrderByIdDesc(userEmail);
+        model.addAttribute("isLoggedIn", true);
+        model.addAttribute("isSeller", true);
+        model.addAttribute("listings", myListings);
+        return "seller-manage";
+    }
+
+    @PostMapping("/seller/manage/update")
+    public String updateListing(@RequestParam Long id,
+                                @RequestParam String name,
+                                @RequestParam String description,
+                                @RequestParam Double price,
+                                @RequestParam String location,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        String userEmail = (String) session.getAttribute("loggedInUser");
+        if (userEmail == null) return "redirect:/login";
+        Listing listing = listingRepository.findById(id).orElse(null);
+        if (listing == null || !userEmail.equals(listing.getOwnerEmail())) {
+            redirectAttributes.addFlashAttribute("error", "You can only edit your own listings.");
+            return "redirect:/seller/manage";
+        }
+        listing.setName(name);
+        listing.setDescription(description);
+        listing.setPrice(price);
+        listing.setLocation(location);
+        listingRepository.save(listing);
+        redirectAttributes.addFlashAttribute("success", "Listing updated.");
+        return "redirect:/seller/manage";
+    }
+
+    @PostMapping("/seller/manage/delete")
+    public String deleteListing(@RequestParam Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        String userEmail = (String) session.getAttribute("loggedInUser");
+        if (userEmail == null) return "redirect:/login";
+        Listing listing = listingRepository.findById(id).orElse(null);
+        if (listing == null || !userEmail.equals(listing.getOwnerEmail())) {
+            redirectAttributes.addFlashAttribute("error", "You can only delete your own listings.");
+            return "redirect:/seller/manage";
+        }
+        listingRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Listing deleted.");
+        return "redirect:/seller/manage";
     }
 
     @GetMapping("/listing/{id:\\d+}{slug:(?:-[a-z0-9-]+)?}")

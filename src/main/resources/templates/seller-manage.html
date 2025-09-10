@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Listings - Monito</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <nav class="container">
+        <a th:href="@{/}" class="logo">Monito</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/seller-upload}">Upload</a></li>
+            <li>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+            </li>
+        </ul>
+        <button class="mobile-menu-toggle">☰</button>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Manage Your Listings</h1>
+            <p class="page-subtitle">Edit or remove your products</p>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="container">
+            <div th:if="${success}" class="alert alert-success" style="background-color: var(--accent-success); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card listing-card" th:each="item : ${listings}">
+                    <div class="listing-image" th:if="${item.imagePaths}">
+                        <img th:src="${#strings.arraySplit(item.imagePaths, ',')[0]}" th:alt="${item.name}" />
+                    </div>
+                    <h3 class="listing-title" th:text="${item.name}">Name</h3>
+                    <p class="listing-price" th:text="${'NPR ' + #numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">NPR 0.00</p>
+                    <form th:action="@{/seller/manage/update}" method="post" style="width:100%; text-align:left; margin-top:0.5rem;">
+                        <input type="hidden" name="id" th:value="${item.id}">
+                        <label style="font-size:0.85rem;">Name</label>
+                        <input class="form-control" name="name" th:value="${item.name}">
+                        <label style="font-size:0.85rem; margin-top:0.5rem;">Description</label>
+                        <textarea class="form-control" name="description" rows="3" th:text="${item.description}"></textarea>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <div style="flex:1;">
+                                <label style="font-size:0.85rem;">Price</label>
+                                <input class="form-control" type="number" step="0.01" name="price" th:value="${item.price}">
+                            </div>
+                            <div style="flex:1;">
+                                <label style="font-size:0.85rem;">Location</label>
+                                <input class="form-control" name="location" th:value="${item.location}">
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+                            <button class="btn btn-primary" type="submit" style="flex:1;">Save</button>
+                            <form th:action="@{/seller/manage/delete}" method="post" style="flex:1;">
+                                <input type="hidden" name="id" th:value="${item.id}">
+                                <button class="btn btn-secondary" type="submit" style="width:100%; background-color: var(--accent-secondary);">Delete</button>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-bottom">
+            <p>&copy; 2024 Monito Pet Marketplace. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const themeSwitch = document.getElementById('theme-switch');
+    const htmlElement = document.documentElement;
+    if (themeSwitch) {
+        themeSwitch.addEventListener('change', function() {
+            if (this.checked) { htmlElement.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); }
+            else { htmlElement.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); }
+        });
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') { themeSwitch.checked = true; }
+    }
+</script>
+
+</body>
+</html>
+
+

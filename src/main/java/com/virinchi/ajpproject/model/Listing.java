@@ -33,6 +33,9 @@ public class Listing {
     @Column(length = 2000)
     private String imagePaths;
 
+    // owner email of the seller who created the listing
+    private String ownerEmail;
+
     public Listing() {}
 
     public Long getId() {
@@ -117,6 +120,14 @@ public class Listing {
 
     public void setImagePaths(String imagePaths) {
         this.imagePaths = imagePaths;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
     }
 }
 

@@ -24,7 +24,7 @@ public class EmailService {
         msg.setSubject("Welcome to Monito");
         msg.setText("Hi " + (firstName != null ? firstName : "there") + ",\n\n" +
                 "Welcome to Monito! Your account has been created successfully.\n\n" +
-                "Happy browsing!\nMonito Team");
+                "Happy browsing!(Sway loves u :>)\nMonito Team");
         mailSender.send(msg);
     }
 }

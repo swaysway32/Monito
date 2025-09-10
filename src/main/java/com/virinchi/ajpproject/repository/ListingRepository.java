@@ -15,6 +15,8 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             "LOWER(l.description) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(l.location) LIKE LOWER(CONCAT('%', :q, '%'))")
     List<Listing> searchByKeyword(@Param("q") String keyword);
+
+    List<Listing> findByOwnerEmailOrderByIdDesc(String ownerEmail);
 }
 
 
