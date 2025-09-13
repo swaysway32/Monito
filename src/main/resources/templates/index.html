@@ -47,7 +47,7 @@
             <h1 th:if="${!isLoggedIn}">Find Your Perfect Pet Companion</h1>
             <h1 th:if="${isLoggedIn}">Welcome back, <span th:text="${userName}"></span>!</h1>
 
-            <p th:if="${!isLoggedIn}">Discover amazing pets and pet toys from trusted sellers worldwide</p>
+            <p th:if="${!isLoggedIn}">Discover amazing pets and pet accessories from trusted sellers worldwide</p>
             <p th:if="${isLoggedIn}">Ready to find more amazing pets and toys for your furry friends?</p>
 
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center;">
@@ -85,9 +85,9 @@
                 </div>
                 <div class="card category-card">
                     <div class="category-icon">🧸</div>
-                    <h3>Pet Toys</h3>
-                    <p>Fun toys for your pets</p>
-                    <a href="#" class="btn btn-primary">Browse Toys</a>
+                    <h3>Pet Accessories</h3>
+                    <p>Essential accessories for your pets</p>
+                    <a href="#" class="btn btn-primary">Browse Accessories</a>
                 </div>
             </div>
         </div>

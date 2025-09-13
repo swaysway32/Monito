@@ -10,7 +10,7 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String listingType; // pet or toy
+    private String listingType; // pet or accessory
 
     private String name;
 

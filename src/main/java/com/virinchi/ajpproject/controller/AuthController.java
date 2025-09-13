@@ -145,7 +145,11 @@ public class AuthController {
             } catch (Exception ex) {
                 log.warn("Welcome email failed for {}: {}", email, ex.getMessage());
             }
-            redirectAttributes.addFlashAttribute("message", "Account created successfully! Please log in.");
+            String welcomeMessage = String.format(
+                "Welcome to Monito! 🎉 Your account has been created successfully with email: %s. " +
+                "A verification email has been sent to your inbox. Please log in to continue your journey with us!", 
+                email);
+            redirectAttributes.addFlashAttribute("message", welcomeMessage);
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/login";
         } catch (Exception e) {

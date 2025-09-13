@@ -13,7 +13,7 @@
         <ul class="nav-links">
             <li><a th:href="@{/}">Home</a></li>
             <li><a href="#">Browse Pets</a></li>
-            <li><a href="#">Browse Pet Toys</a></li>
+            <li><a href="#">Browse Pet Accessories</a></li>
             <li><a th:href="@{/become-seller}">Become a Seller</a></li>
             <li><a href="#">Contact Us</a></li>
             <li th:if="${!isLoggedIn}"><a th:href="@{/login}">Login</a></li>
@@ -63,7 +63,7 @@
                         <select id="listingType" name="listingType" class="form-control" required th:field="*{listingType}">
                             <option value="">Select Type</option>
                             <option value="pet">Pet</option>
-                            <option value="toy">Pet Toy</option>
+                            <option value="accessory">Pet Accessory</option>
                         </select>
                     </div>
 
@@ -88,9 +88,9 @@
                             <option value="cats">Cats</option>
                             <option value="birds">Birds</option>
                             <option value="small-pets">Small Pets</option>
-                            <option value="dog-toys">Dog Toys</option>
-                            <option value="cat-toys">Cat Toys</option>
-                            <option value="bird-toys">Bird Toys</option>
+                            <option value="dog-accessories">Dog Accessories</option>
+                            <option value="cat-accessories">Cat Accessories</option>
+                            <option value="bird-accessories">Bird Accessories</option>
                             <option value="accessories">Pet Accessories</option>
                         </select>
                     </div>

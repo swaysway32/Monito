@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - Monito</title>
   <link rel="stylesheet" th:href="@{/styles.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <header>
@@ -78,7 +79,7 @@
               <select id="interests" name="interests" class="form-control">
                 <option value="">Select your interest</option>
                 <option value="buying-pets">Buying Pets</option>
-                <option value="buying-toys">Buying Pet Toys</option>
+                <option value="buying-accessories">Buying Pet Accessories</option>
                 <option value="both">Both Pets and Toys</option>
                 <option value="selling">Selling (I'll register as seller later)</option>
               </select>
@@ -178,6 +179,22 @@
   htmlElement.setAttribute('data-theme', savedTheme);
   if (savedTheme === 'dark') {
     themeSwitch.checked = true;
+  }
+  // Theme switching code...
+
+  function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling.querySelector('i');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
   }
 </script>
 </body>

@@ -498,6 +498,34 @@ footer {
 
     .categories,
     .featured {
+    }
+}
+
+/* Password Field Styles */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+    padding: 5px;
+}
+
+.password-toggle:hover {
+    color: var(--accent-primary);
+}
+
+.password-field input {
+    padding-right: 35px;
+}
         padding: 2rem 0;
     }
 
