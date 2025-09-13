@@ -72,6 +72,12 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("message", "Welcome, Admin!");
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/admin";
+        } else {
+            // Check if attempting admin login but failed
+            if (email.endsWith("@monito.com")) {
+                redirectAttributes.addFlashAttribute("error", "Invalid admin credentials!");
+                return "redirect:/login";
+            }
         }
 
         // Then check if it's a regular user login

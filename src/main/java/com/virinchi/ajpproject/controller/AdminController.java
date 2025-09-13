@@ -31,12 +31,18 @@ public class AdminController {
     private UserRepository userRepository;
 
     @GetMapping("/admin")
-    public String showAdminDashboard(Model model, HttpSession session) {
+    public String showAdminDashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
-        model.addAttribute("isLoggedIn", isLoggedIn != null && isLoggedIn);
-        model.addAttribute("isAdmin", isAdmin != null && isAdmin);
+        // Check if user is logged in and is admin
+        if (isLoggedIn == null || !isLoggedIn || isAdmin == null || !isAdmin) {
+            redirectAttributes.addFlashAttribute("error", "You must be logged in as an administrator to access this page.");
+            return "redirect:/login";
+        }
+
+        model.addAttribute("isLoggedIn", true);
+        model.addAttribute("isAdmin", true);
 
         long totalListings = listingRepository.count();
         model.addAttribute("totalListings", totalListings);
