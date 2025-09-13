@@ -37,6 +37,34 @@ public class ListingController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/browse-pets")
+    public String browsePets(Model model, HttpSession session) {
+        List<Listing> petListings = listingRepository.findByListingType("pet");
+        model.addAttribute("listings", petListings);
+        setupCommonModelAttributes(model, session);
+        return "index";
+    }
+
+    @GetMapping("/browse-accessories")
+    public String browseAccessories(Model model, HttpSession session) {
+        List<Listing> accessoryListings = listingRepository.findByListingType("accessory");
+        model.addAttribute("listings", accessoryListings);
+        setupCommonModelAttributes(model, session);
+        return "index";
+    }
+
+    private void setupCommonModelAttributes(Model model, HttpSession session) {
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        Boolean isSeller = (Boolean) session.getAttribute("isSeller");
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        String userName = (String) session.getAttribute("userName");
+
+        model.addAttribute("isLoggedIn", isLoggedIn != null && isLoggedIn);
+        model.addAttribute("isSeller", isSeller != null && isSeller);
+        model.addAttribute("isAdmin", isAdmin != null && isAdmin);
+        model.addAttribute("userName", userName);
+    }
+
     @GetMapping("/seller-upload")
     public String showUploadPage(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         // Check if user is logged in

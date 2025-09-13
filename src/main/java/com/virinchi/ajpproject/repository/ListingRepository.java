@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ListingRepository extends JpaRepository<Listing, Long> {
+    List<Listing> findByListingType(String listingType);
     @Query("SELECT l FROM Listing l WHERE " +
             "LOWER(l.name) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(l.category) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
