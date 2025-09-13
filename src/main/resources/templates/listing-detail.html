@@ -9,6 +9,23 @@
         .detail-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
         .detail-hero { grid-column: 1 / -1; }
         .detail-hero img, .detail-gallery img { width: 100%; height: auto; border-radius: 8px; }
+        
+        .rating-stars { display: flex; gap: 0.25rem; margin: 0.5rem 0; }
+        .star { color: #ffd700; font-size: 1.2rem; }
+        .star.empty { color: #ddd; }
+        
+        .review-form { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; margin: 2rem 0; }
+        .review-item { background: var(--card-bg); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid var(--accent-primary); }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .review-rating { display: flex; gap: 0.25rem; }
+        .review-date { color: var(--text-secondary); font-size: 0.9rem; }
+        .review-comment { margin-top: 0.5rem; line-height: 1.5; }
+        
+        .rating-input { display: flex; gap: 0.5rem; margin: 1rem 0; }
+        .rating-input input[type="radio"] { display: none; }
+        .rating-input label { cursor: pointer; font-size: 1.5rem; color: #ddd; transition: color 0.2s; }
+        .rating-input label:hover, .rating-input label:hover ~ label { color: #ffd700; }
+        .rating-input input[type="radio"]:checked ~ label { color: #ffd700; }
     </style>
     </head>
 <body>
@@ -80,6 +97,97 @@
             </div>
         </div>
     </section>
+
+    <!-- Reviews Section -->
+    <section class="main-content">
+        <div class="container">
+            <h2>Reviews & Ratings</h2>
+            
+            <!-- Overall Rating Summary -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; font-weight: bold; color: var(--accent-primary);" th:text="${#numbers.formatDecimal(averageRating, 1, 2)}">0.0</div>
+                        <div class="rating-stars">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}" 
+                                  th:class="${i <= (averageRating != null ? averageRating : 0)} ? 'star' : 'star empty'">★</span>
+                        </div>
+                        <div style="color: var(--text-secondary);" th:text="${totalReviews} + ' review(s)'">0 reviews</div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div th:each="rating : ${#numbers.sequence(5, 1, -1)}" style="display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0;">
+                            <span th:text="${rating}">5</span>
+                            <div style="flex: 1; height: 8px; background: #ddd; border-radius: 4px;">
+                                <div style="height: 100%; background: var(--accent-primary); border-radius: 4px; width: 0%;"></div>
+                            </div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Form (only for logged-in users) -->
+            <div th:if="${isLoggedIn}" class="review-form">
+                <h3 th:if="${userReview == null}">Write a Review</h3>
+                <h3 th:if="${userReview != null}">Update Your Review</h3>
+                
+                <form th:action="@{'/listing/' + ${listing.id} + '/review'}" method="post">
+                    <div class="rating-input">
+                        <input type="radio" id="star5" name="rating" value="5" th:checked="${userReview != null && userReview.rating == 5}">
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4" th:checked="${userReview != null && userReview.rating == 4}">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3" th:checked="${userReview != null && userReview.rating == 3}">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2" th:checked="${userReview != null && userReview.rating == 2}">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1" th:checked="${userReview != null && userReview.rating == 1}">
+                        <label for="star1">★</label>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <label for="comment" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Comment (optional):</label>
+                        <textarea id="comment" name="comment" rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical;" 
+                                  th:placeholder="'Share your experience with this ' + ${listing.name} + '...'" 
+                                  th:text="${userReview != null ? userReview.comment : ''}"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" th:text="${userReview != null ? 'Update Review' : 'Submit Review'}">Submit Review</button>
+                </form>
+            </div>
+
+            <!-- Login prompt for non-logged-in users -->
+            <div th:if="${!isLoggedIn}" class="card" style="text-align: center; margin: 2rem 0;">
+                <h3>Want to leave a review?</h3>
+                <p>Please <a th:href="@{/login}" style="color: var(--accent-primary);">log in</a> to share your experience with this product.</p>
+            </div>
+
+            <!-- Reviews List -->
+            <div th:if="${reviews != null && !reviews.isEmpty()}">
+                <h3>Customer Reviews</h3>
+                <div th:each="review : ${reviews}" class="review-item">
+                    <div class="review-header">
+                        <div>
+                            <strong th:text="${review.userName}">User Name</strong>
+                            <div class="review-rating">
+                                <span th:each="i : ${#numbers.sequence(1, 5)}" 
+                                      th:class="${i <= (review.rating != null ? review.rating : 0)} ? 'star' : 'star empty'">★</span>
+                            </div>
+                        </div>
+                        <div class="review-date" th:text="${review.createdAt != null ? #temporals.format(review.createdAt, 'MMM dd, yyyy') : 'Recently'}">Date</div>
+                    </div>
+                    <div th:if="${review.comment != null && !review.comment.isEmpty()}" 
+                         class="review-comment" th:text="${review.comment}">Review comment</div>
+                </div>
+            </div>
+
+            <!-- No reviews message -->
+            <div th:if="${reviews == null || reviews.isEmpty()}" class="card" style="text-align: center; margin: 2rem 0;">
+                <h3>No reviews yet</h3>
+                <p>Be the first to review this product!</p>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer>
@@ -111,6 +219,45 @@
             themeSwitch.checked = true;
         }
     }
+
+    // Star rating interaction
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingInputs = document.querySelectorAll('.rating-input input[type="radio"]');
+        const ratingLabels = document.querySelectorAll('.rating-input label');
+        
+        ratingLabels.forEach((label, index) => {
+            label.addEventListener('mouseenter', function() {
+                // Highlight stars on hover
+                for (let i = 0; i <= index; i++) {
+                    ratingLabels[i].style.color = '#ffd700';
+                }
+            });
+        });
+        
+        document.querySelector('.rating-input').addEventListener('mouseleave', function() {
+            // Reset to selected rating on mouse leave
+            const checkedInput = document.querySelector('.rating-input input[type="radio"]:checked');
+            if (checkedInput) {
+                const checkedIndex = Array.from(ratingInputs).indexOf(checkedInput);
+                ratingLabels.forEach((label, index) => {
+                    label.style.color = index <= checkedIndex ? '#ffd700' : '#ddd';
+                });
+            } else {
+                ratingLabels.forEach(label => {
+                    label.style.color = '#ddd';
+                });
+            }
+        });
+        
+        ratingInputs.forEach((input, index) => {
+            input.addEventListener('change', function() {
+                // Update star colors when rating is selected
+                ratingLabels.forEach((label, i) => {
+                    label.style.color = i <= index ? '#ffd700' : '#ddd';
+                });
+            });
+        });
+    });
 </script>
 </html>
 

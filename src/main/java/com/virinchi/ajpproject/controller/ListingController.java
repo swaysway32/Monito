@@ -1,8 +1,10 @@
 package com.virinchi.ajpproject.controller;
 
 import com.virinchi.ajpproject.model.Listing;
+import com.virinchi.ajpproject.model.Review;
 import com.virinchi.ajpproject.model.user;
 import com.virinchi.ajpproject.repository.ListingRepository;
+import com.virinchi.ajpproject.repository.ReviewRepository;
 import com.virinchi.ajpproject.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class ListingController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @GetMapping("/browse-pets")
     public String browsePets(Model model, HttpSession session) {
@@ -246,12 +251,50 @@ public class ListingController {
     @GetMapping("/listing/{id:\\d+}{slug:(?:-[a-z0-9-]+)?}")
     public String viewListing(@org.springframework.web.bind.annotation.PathVariable Long id,
                               @org.springframework.web.bind.annotation.PathVariable(required = false) String slug,
-                              Model model) {
+                              Model model, HttpSession session) {
         Listing listing = listingRepository.findById(id).orElse(null);
         if (listing == null) {
             return "not-found";
         }
+        
+        // Get reviews for this listing
+        List<Review> reviews = new ArrayList<>();
+        try {
+            reviews = reviewRepository.findByListingIdOrderByCreatedAtDesc(id);
+        } catch (Exception e) {
+            // If reviews table doesn't exist yet, just use empty list
+            reviews = new ArrayList<>();
+        }
+        
+        // Calculate average rating
+        Double averageRating = 0.0;
+        try {
+            averageRating = reviewRepository.findAverageRatingByListingId(id);
+            if (averageRating == null) {
+                averageRating = 0.0;
+            }
+        } catch (Exception e) {
+            // If there's an issue with the query, default to 0.0
+            averageRating = 0.0;
+        }
+        
+        // Check if current user has already reviewed this listing
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        Review userReview = null;
+        if (isLoggedIn != null && isLoggedIn) {
+            String userEmail = (String) session.getAttribute("userEmail");
+            if (userEmail != null) {
+                userReview = reviewRepository.findByListingIdAndUserEmail(id, userEmail).orElse(null);
+            }
+        }
+        
         model.addAttribute("listing", listing);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("averageRating", averageRating);
+        model.addAttribute("totalReviews", reviews.size());
+        model.addAttribute("isLoggedIn", isLoggedIn != null && isLoggedIn);
+        model.addAttribute("userReview", userReview);
+        
         return "listing-detail";
     }
 
@@ -259,6 +302,60 @@ public class ListingController {
     @ResponseBody
     public Listing getListing(@org.springframework.web.bind.annotation.PathVariable Long id) {
         return listingRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping("/listing/{id}/review")
+    public String submitReview(@org.springframework.web.bind.annotation.PathVariable Long id,
+                               @RequestParam Integer rating,
+                               @RequestParam(required = false) String comment,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+        
+        // Check if user is logged in
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (isLoggedIn == null || !isLoggedIn) {
+            redirectAttributes.addFlashAttribute("error", "Please log in to leave a review.");
+            return "redirect:/login";
+        }
+        
+        // Validate rating
+        if (rating == null || rating < 1 || rating > 5) {
+            redirectAttributes.addFlashAttribute("error", "Please provide a valid rating between 1 and 5 stars.");
+            return "redirect:/listing/" + id;
+        }
+        
+        // Check if listing exists
+        Listing listing = listingRepository.findById(id).orElse(null);
+        if (listing == null) {
+            redirectAttributes.addFlashAttribute("error", "Listing not found.");
+            return "redirect:/";
+        }
+        
+        String userEmail = (String) session.getAttribute("userEmail");
+        String userName = (String) session.getAttribute("loggedInUser");
+        
+        if (userEmail == null || userName == null) {
+            redirectAttributes.addFlashAttribute("error", "User information not found. Please log in again.");
+            return "redirect:/login";
+        }
+        
+        // Check if user has already reviewed this listing
+        Review existingReview = reviewRepository.findByListingIdAndUserEmail(id, userEmail).orElse(null);
+        if (existingReview != null) {
+            // Update existing review
+            existingReview.setRating(rating);
+            existingReview.setComment(comment != null ? comment.trim() : "");
+            existingReview.setCreatedAt(java.time.LocalDateTime.now());
+            reviewRepository.save(existingReview);
+            redirectAttributes.addFlashAttribute("success", "Your review has been updated successfully!");
+        } else {
+            // Create new review
+            Review review = new Review(id, userEmail, userName, rating, comment != null ? comment.trim() : "");
+            reviewRepository.save(review);
+            redirectAttributes.addFlashAttribute("success", "Thank you for your review!");
+        }
+        
+        return "redirect:/listing/" + id;
     }
 }
 

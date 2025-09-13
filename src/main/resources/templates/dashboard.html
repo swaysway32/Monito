@@ -11,6 +11,7 @@
     <nav class="container">
         <a th:href="@{/dashboard}" class="logo">Monito</a>
         <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
             <li><a th:href="@{/dashboard}">Dashboard</a></li>
             <li><a href="#">Browse Pets</a></li>
             <li><a href="#">Browse Pet Toys</a></li>
@@ -32,8 +33,15 @@
 <main>
     <section class="page-header">
         <div class="container">
-            <h1 class="page-title">Seller Dashboard</h1>
-            <p class="page-subtitle">Manage your pet marketplace business</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 class="page-title">Seller Dashboard</h1>
+                    <p class="page-subtitle">Manage your pet marketplace business</p>
+                </div>
+                <a th:href="@{/}" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; text-decoration: none; white-space: nowrap;">
+                    🏠 Back to Home
+                </a>
+            </div>
         </div>
     </section>
 
@@ -134,6 +142,7 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
+                    <li><a th:href="@{/}">Home</a></li>
                     <li><a th:href="@{/dashboard}">Dashboard</a></li>
                     <li><a href="#">Browse Pets</a></li>
                     <li><a href="#">Browse Pet Toys</a></li>
