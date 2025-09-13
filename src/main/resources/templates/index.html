@@ -69,25 +69,25 @@
                     <div class="category-icon">🐕</div>
                     <h3>Dogs</h3>
                     <p>Find your loyal companion</p>
-                    <a href="#" class="btn btn-primary">Browse Dogs</a>
+                    <a th:href="@{/browse-pets}" class="btn btn-primary">Browse Dogs</a>
                 </div>
                 <div class="card category-card">
                     <div class="category-icon">🐱</div>
                     <h3>Cats</h3>
                     <p>Discover independent friends</p>
-                    <a href="#" class="btn btn-primary">Browse Cats</a>
+                    <a th:href="@{/browse-pets}" class="btn btn-primary">Browse Cats</a>
                 </div>
                 <div class="card category-card">
                     <div class="category-icon">🐦</div>
                     <h3>Birds</h3>
                     <p>Colorful singing companions</p>
-                    <a href="#" class="btn btn-primary">Browse Birds</a>
+                    <a th:href="@{/browse-pets}" class="btn btn-primary">Browse Birds</a>
                 </div>
                 <div class="card category-card">
                     <div class="category-icon">🧸</div>
                     <h3>Pet Accessories</h3>
                     <p>Essential accessories for your pets</p>
-                    <a href="#" class="btn btn-primary">Browse Accessories</a>
+                    <a th:href="@{/browse-accessories}" class="btn btn-primary">Browse Accessories</a>
                 </div>
             </div>
         </div>
@@ -119,8 +119,8 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a th:href="@{/}">Home</a></li>
-                    <li><a href="#">Browse Pets</a></li>
-                    <li><a href="#">Browse Pet Toys</a></li>
+                    <li><a th:href="@{/browse-pets}">Browse Pets</a></li>
+                    <li><a th:href="@{/browse-accessories}">Browse Pet Accessories</a></li>
                     <li><a th:href="@{/become-seller}">Become a Seller</a></li>
                 </ul>
             </div>

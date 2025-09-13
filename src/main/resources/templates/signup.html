@@ -6,6 +6,253 @@
   <title>Sign Up - Monito</title>
   <link rel="stylesheet" th:href="@{/styles.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Enhanced Signup Page Styles */
+    .signup-hero {
+      background: linear-gradient(135deg, var(--accent-success) 0%, #4facfe 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .signup-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="pets" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12.5" cy="12.5" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="17" cy="8" r="1.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23pets)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .signup-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    
+    .signup-content {
+      color: white;
+    }
+    
+    .signup-content h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .signup-content p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .signup-benefits {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .signup-benefits li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .signup-benefits i {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    
+    .signup-form-container {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .signup-form-container h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      color: var(--text-primary);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: var(--bg-primary);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-success);
+      box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+    }
+    
+    .password-field {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+    
+    .password-toggle:hover {
+      color: var(--accent-success);
+    }
+    
+    .auth-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--accent-success), #4facfe);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+    
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+    }
+    
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-social:hover {
+      border-color: var(--accent-success);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .google-btn .social-icon {
+      background: #db4437;
+    }
+    
+    .facebook-btn .social-icon {
+      background: #3b5998;
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    
+    .auth-footer a {
+      color: var(--accent-success);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .signup-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1rem;
+      }
+      
+      .signup-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .signup-form-container {
+        padding: 2rem;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 <header>
@@ -31,25 +278,30 @@
 </header>
 
 <main>
-  <section class="page-header">
-    <div class="container">
-      <h1 class="page-title">Join Monito</h1>
-      <p class="page-subtitle">Create your account and start your journey with amazing pets</p>
-    </div>
-  </section>
+  <section class="signup-hero">
+    <div class="signup-container">
+      <div class="signup-content">
+        <h1>Join the Monito Family! 🐕🐱</h1>
+        <p>Create your account and start your journey with amazing pets. Connect with trusted sellers and find your perfect companion today.</p>
+        <ul class="signup-benefits">
+          <li><i class="fas fa-search"></i> Browse thousands of pets and accessories</li>
+          <li><i class="fas fa-shield-alt"></i> Verified sellers and safe transactions</li>
+          <li><i class="fas fa-users"></i> Join our community of pet lovers</li>
+          <li><i class="fas fa-bell"></i> Get notified about new listings</li>
+          <li><i class="fas fa-heart"></i> Save your favorite pets</li>
+        </ul>
+      </div>
+      
+      <div class="signup-form-container">
+        <h2>Create Your Account</h2>
 
-  <section class="main-content">
-    <div class="container">
-      <div class="auth-container">
-        <div class="card auth-card">
-          <h2>Create Your Account</h2>
+        <!-- Error Message -->
+        <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center;">
+          <span th:text="${error}"></span>
+        </div>
 
-          <!-- Error Message -->
-          <div th:if="${error}" class="alert alert-error" style="background-color: var(--accent-secondary); color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
-            <span th:text="${error}"></span>
-          </div>
-
-          <form th:action="@{/signup}" method="post">
+        <form th:action="@{/signup}" method="post">
+          <div class="form-row">
             <div class="form-group">
               <label for="firstName">First Name</label>
               <input type="text" id="firstName" name="firstName" class="form-control" required placeholder="Enter your first name">
@@ -58,74 +310,87 @@
               <label for="lastName">Last Name</label>
               <input type="text" id="lastName" name="lastName" class="form-control" required placeholder="Enter your last name">
             </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number (optional)">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <div class="password-field">
-                <input type="password" id="password" name="password" class="form-control" required placeholder="Create a strong password">
-                <span class="password-toggle" onclick="togglePassword('password')">
-                  <i class="fas fa-eye"></i>
-                </span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="confirmPassword">Confirm Password</label>
-              <div class="password-field">
-                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required placeholder="Confirm your password">
-                <span class="password-toggle" onclick="togglePassword('confirmPassword')">
-                  <i class="fas fa-eye"></i>
-                </span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="interests">I'm interested in:</label>
-              <select id="interests" name="interests" class="form-control">
-                <option value="">Select your interest</option>
-                <option value="buying-pets">Buying Pets</option>
-                <option value="buying-accessories">Buying Pet Accessories</option>
-                <option value="both">Both Pets and Toys</option>
-                <option value="selling">Selling (I'll register as seller later)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input type="checkbox" id="terms" required>
-                <span class="checkmark"></span>
-                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-              </label>
-            </div>
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input type="checkbox" id="newsletter" name="newsletter">
-                <span class="checkmark"></span>
-                Subscribe to our newsletter for pet care tips and special offers
-              </label>
-            </div>
-            <button type="submit" class="btn btn-success auth-btn">Create Account</button>
-          </form>
-          <div class="auth-divider">
-            <span>or</span>
           </div>
-          <div class="social-login">
-            <button class="btn btn-social google-btn">
-              <span class="social-icon">G</span>
-              Sign up with Google
-            </button>
-            <button class="btn btn-social facebook-btn">
-              <span class="social-icon">f</span>
-              Sign up with Facebook
-            </button>
+          
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email">
           </div>
-          <div class="auth-footer">
-            <p>Already have an account? <a th:href="@{/login}">Sign in here</a></p>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number (optional)">
           </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-field">
+              <input type="password" id="password" name="password" class="form-control" required placeholder="Create a strong password">
+              <span class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye"></i>
+              </span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="password-field">
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required placeholder="Confirm your password">
+              <span class="password-toggle" onclick="togglePassword('confirmPassword')">
+                <i class="fas fa-eye"></i>
+              </span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="interests">I'm interested in:</label>
+            <select id="interests" name="interests" class="form-control">
+              <option value="">Select your interest</option>
+              <option value="buying-pets">🐕 Buying Pets</option>
+              <option value="buying-accessories">🧸 Buying Pet Accessories</option>
+              <option value="both">🐾 Both Pets and Accessories</option>
+              <option value="selling">💰 Selling (I'll register as seller later)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="terms" required>
+              <span class="checkmark"></span>
+              I agree to the <a href="#" style="color: var(--accent-success);">Terms of Service</a> and <a href="#" style="color: var(--accent-success);">Privacy Policy</a>
+            </label>
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="newsletter" name="newsletter">
+              <span class="checkmark"></span>
+              📧 Subscribe to our newsletter for pet care tips and special offers
+            </label>
+          </div>
+          
+          <button type="submit" class="auth-btn">
+            <i class="fas fa-user-plus"></i> Create Account
+          </button>
+        </form>
+        
+        <div class="auth-divider">
+          <span>or sign up with</span>
+        </div>
+        
+        <div class="social-login">
+          <button class="btn-social google-btn">
+            <span class="social-icon">G</span>
+            Sign up with Google
+          </button>
+          <button class="btn-social facebook-btn">
+            <span class="social-icon">f</span>
+            Sign up with Facebook
+          </button>
+        </div>
+        
+        <div class="auth-footer">
+          <p>Already have an account? <a th:href="@{/login}">Sign in here</a></p>
         </div>
       </div>
     </div>
@@ -205,6 +470,87 @@
       icon.classList.remove('fa-eye-slash');
       icon.classList.add('fa-eye');
     }
+  }
+
+  // Enhanced form interactions
+  document.addEventListener('DOMContentLoaded', function() {
+    // Password strength indicator
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    if (passwordInput) {
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const strength = getPasswordStrength(password);
+        updatePasswordStrength(strength);
+      });
+    }
+
+    // Confirm password validation
+    if (confirmPasswordInput) {
+      confirmPasswordInput.addEventListener('input', function() {
+        const password = passwordInput.value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+          this.setCustomValidity('Passwords do not match');
+        } else {
+          this.setCustomValidity('');
+        }
+      });
+    }
+
+    // Add loading state to submit button
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', function() {
+        const submitBtn = this.querySelector('.auth-btn');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+        submitBtn.disabled = true;
+      });
+    }
+
+    // Add smooth scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe form elements
+    const formElements = document.querySelectorAll('.signup-form-container > *');
+    formElements.forEach((el, index) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+      observer.observe(el);
+    });
+  });
+
+  function getPasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+  }
+
+  function updatePasswordStrength(strength) {
+    const strengthText = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+    const strengthColors = ['#e74c3c', '#f39c12', '#f1c40f', '#2ecc71', '#27ae60'];
+    
+    // You can add a password strength indicator here if needed
+    console.log(`Password strength: ${strengthText[strength - 1] || 'Very Weak'}`);
   }
 </script>
 </body>
