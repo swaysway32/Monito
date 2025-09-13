@@ -22,9 +22,17 @@ public class EmailService {
         msg.setFrom(fromAddress);
         msg.setTo(toEmail);
         msg.setSubject("Welcome to Monito");
-        msg.setText("Hi " + (firstName != null ? firstName : "there") + ",\n\n" +
-                "Welcome to Monito! Your account has been created successfully.\n\n" +
-                "Happy browsing!(Sway loves u :>)\nMonito Team");
+        msg.setText("Dear " + (firstName != null ? firstName : "there") + ",\n\n" +
+                "🌟 Welcome to the Monito Family! 🐾\n\n" +
+                "We're thrilled to have you join our community of pet lovers!\n\n" +
+                "🎉 Your Monito account has been successfully created.\n" +
+                "🏠 Browse amazing pets and accessories in our marketplace\n" +
+                "💌 Connect with fellow pet enthusiasts\n" +
+                "🎁 Get exclusive updates on new arrivals and special offers\n\n" +
+                "If you have any questions or need assistance, our support team is here to help!\n\n" +
+                "Wishing you a wonderful journey with us,\n" +
+                "The Monito Team 🐾\n\n" +
+                "P.S. Don't forget to check out our latest collection!");
         mailSender.send(msg);
     }
 }

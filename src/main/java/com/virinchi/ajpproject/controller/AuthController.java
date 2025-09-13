@@ -146,9 +146,13 @@ public class AuthController {
                 log.warn("Welcome email failed for {}: {}", email, ex.getMessage());
             }
             String welcomeMessage = String.format(
-                "Welcome to Monito! 🎉 Your account has been created successfully with email: %s. " +
-                "A verification email has been sent to your inbox. Please log in to continue your journey with us!", 
-                email);
+                "🎉 Welcome to the Monito Family, %s! 🐾\n\n" +
+                "Your account has been successfully created with: %s\n" +
+                "✨ Get ready to explore our wonderful world of pets and accessories!\n" +
+                "📧 We've sent a verification email to your inbox - please check it out.\n" +
+                "🔐 You can now log in and start your journey with us!\n\n" +
+                "Need help? Feel free to contact our support team.",
+                firstName, email);
             redirectAttributes.addFlashAttribute("message", welcomeMessage);
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/login";
