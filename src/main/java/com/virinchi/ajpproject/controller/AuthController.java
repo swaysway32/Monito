@@ -148,7 +148,7 @@ public class AuthController {
             String welcomeMessage = String.format(
                 "🎉 Welcome to the Monito Family, %s! 🐾\n\n" +
                 "Your account has been successfully created with: %s\n" +
-                "✨ Get ready to explore our wonderful world of pets and accessories!\n" +
+
                 "📧 We've sent a verification email to your inbox - please check it out.\n" +
                 "🔐 You can now log in and start your journey with us!\n\n" +
                 "Need help? Feel free to contact our support team.",

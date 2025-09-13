@@ -498,6 +498,11 @@ footer {
 
     .categories,
     .featured {
+        padding: 2rem 0;
+    }
+
+    .grid {
+        gap: 1rem;
     }
 }
 
@@ -517,6 +522,7 @@ footer {
     color: var(--text-secondary);
     transition: color 0.3s ease;
     padding: 5px;
+    z-index: 1;
 }
 
 .password-toggle:hover {
@@ -525,13 +531,7 @@ footer {
 
 .password-field input {
     padding-right: 35px;
-}
-        padding: 2rem 0;
-    }
-
-    .grid {
-        gap: 1rem;
-    }
+    width: 100%;
 }
 
 /* Page-specific styles */
