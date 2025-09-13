@@ -7,8 +7,27 @@
     <link rel="stylesheet" th:href="@{/styles.css}">
     <style>
         .detail-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-        .detail-hero { grid-column: 1 / -1; }
+        .detail-hero { grid-column: 1 / -1; position: relative; }
         .detail-hero img, .detail-gallery img { width: 100%; height: auto; border-radius: 8px; }
+        
+        .image-container { position: relative; display: inline-block; }
+        .download-btn { 
+            position: absolute; 
+            top: 8px; 
+            right: 8px; 
+            background: rgba(0, 0, 0, 0.7); 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            padding: 6px 10px; 
+            font-size: 12px; 
+            cursor: pointer; 
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        .image-container:hover .download-btn { opacity: 1; }
+        .download-btn:hover { background: rgba(0, 0, 0, 0.9); }
         
         .rating-stars { display: flex; gap: 0.25rem; margin: 0.5rem 0; }
         .star { color: #ffd700; font-size: 1.2rem; }
@@ -66,10 +85,20 @@
                 <div>
                     <div class="detail-gallery">
                         <div class="detail-hero" th:if="${listing.imagePaths}">
-                            <img th:src="${#strings.arraySplit(listing.imagePaths, ',')[0]}" th:alt="${listing.name}">
+                            <div class="image-container">
+                                <img th:src="${#strings.arraySplit(listing.imagePaths, ',')[0]}" th:alt="${listing.name}">
+                                <button class="download-btn" th:onclick="'downloadImage(' + ${listing.id} + ', 0)'" title="Download Image">
+                                    📥 Download
+                                </button>
+                            </div>
                         </div>
                         <div th:each="img, iStat : ${#strings.arraySplit(listing.imagePaths, ',')}">
-                            <img th:if="${iStat.index > 0}" th:src="${img}" th:alt="${listing.name}">
+                            <div th:if="${iStat.index > 0}" class="image-container">
+                                <img th:src="${img}" th:alt="${listing.name}">
+                                <button class="download-btn" th:onclick="'downloadImage(' + ${listing.id} + ', ' + ${iStat.index} + ')'" title="Download Image">
+                                    📥 Download
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -258,6 +287,19 @@
             });
         });
     });
+
+    // Download image function
+    function downloadImage(listingId, imageIndex) {
+        const downloadUrl = `/download-image/${listingId}/${imageIndex}`;
+        
+        // Create a temporary link element and trigger download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = ''; // Let the server determine the filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
 </html>
 

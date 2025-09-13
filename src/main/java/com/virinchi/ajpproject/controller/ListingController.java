@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -356,6 +361,68 @@ public class ListingController {
         }
         
         return "redirect:/listing/" + id;
+    }
+
+    @GetMapping("/download-image/{listingId}/{imageIndex}")
+    public ResponseEntity<byte[]> downloadImage(@PathVariable Long listingId, 
+                                               @PathVariable int imageIndex) {
+        try {
+            // Get the listing
+            Listing listing = listingRepository.findById(listingId).orElse(null);
+            if (listing == null || listing.getImagePaths() == null || listing.getImagePaths().isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Split image paths and get the requested image
+            String[] imagePaths = listing.getImagePaths().split(",");
+            if (imageIndex < 0 || imageIndex >= imagePaths.length) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String imagePath = imagePaths[imageIndex].trim();
+            
+            // Remove leading slash if present and construct full path
+            if (imagePath.startsWith("/")) {
+                imagePath = imagePath.substring(1);
+            }
+            
+            Path filePath = Paths.get(System.getProperty("user.dir"), imagePath);
+            
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Read file content
+            byte[] imageBytes = Files.readAllBytes(filePath);
+            
+            // Determine content type
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            // Create filename
+            String filename = listing.getName().replaceAll("[^a-zA-Z0-9.-]", "_") + 
+                             "_image_" + (imageIndex + 1) + 
+                             getFileExtension(filePath);
+
+            // Set headers for download
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.setContentDispositionFormData("attachment", filename);
+            headers.setContentLength(imageBytes.length);
+
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    private String getFileExtension(Path filePath) {
+        String fileName = filePath.getFileName().toString();
+        int lastDotIndex = fileName.lastIndexOf('.');
+        return lastDotIndex > 0 ? fileName.substring(lastDotIndex) : "";
     }
 }
 
